@@ -8,11 +8,12 @@ configures the Flask application. Delegates logging setup to `logger.py`.
 Details:
 - Uses the application factory pattern for flexible configuration.
 - Assigns a custom logger to `app.logger`, allowing flexibility to add other handlers.
+- Registers a blueprint for the logging demo.
 """
 
-from flask import Flask  # Import the Flask class to create an app instance.
-from .configs import Configs  # Import the selected configuration class.
-from .logger import setup_logger  # Import the logger setup function.
+from flask import Flask
+from .configs import Configs
+from .logger import setup_logger
 
 
 def create_app():
@@ -22,10 +23,18 @@ def create_app():
     Returns:
         app (Flask): The initialized and configured Flask application instance.
     """
-    app = Flask(__name__)  # Create the Flask application instance.
-    app.config.from_object(Configs)  # Load configuration settings into the app.
+    # Step 1: Create the Flask application instance
+    app = Flask(__name__)
 
-    # Set up and assign the custom logger
+    # Step 2: Load configuration settings into the app
+    app.config.from_object(Configs)
+
+    # Step 3: Set up and assign the custom logger
     app.logger = setup_logger()
 
-    return app  # Return the configured app instance.
+    # Step 4: Register the logging demo blueprint
+    from .routes import logging_demo_bp
+    app.register_blueprint(logging_demo_bp)
+
+    # Return the configured app instance
+    return app

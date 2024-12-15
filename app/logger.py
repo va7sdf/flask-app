@@ -25,7 +25,7 @@ def setup_logger():
     """
     # Create a logger instance for the application
     logger = logging.getLogger("flask-app")
-    logger.setLevel(logging.INFO)  # Set the log level (e.g., INFO, DEBUG).
+    logger.setLevel(logging.DEBUG)
 
     # Ensure the logger is not configured multiple times
     if logger.handlers:
@@ -37,13 +37,15 @@ def setup_logger():
 
     log_file = os.path.join(log_directory, "flask-app.log")
 
-    # Configure the rotating file handler
+    # Configure the rotating file handler (10MB per file, 7 backups)
     file_handler = RotatingFileHandler(
-        log_file, maxBytes=10 * 1024 * 1024, backupCount=7  # 10MB per file, 7 backups
+        log_file, maxBytes=10 * 1024 * 1024, backupCount=7
     )
     file_handler.setFormatter(
         logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     )
+    # Configure custom level for file handler
+    file_handler.setLevel(logging.INFO)
     logger.addHandler(file_handler)
 
     # Optionally, add a console handler for development
@@ -51,6 +53,8 @@ def setup_logger():
     console_handler.setFormatter(
         logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     )
+    # Configure custom level for console handler
+    console_handler.setLevel(logging.DEBUG)
     logger.addHandler(console_handler)
 
     return logger
