@@ -36,5 +36,7 @@ def create_app():
     from .routes import logging_demo_bp
     app.register_blueprint(logging_demo_bp)
 
+    app.logger.info("===== STARTING FLASK APP DEMO =====")
+
     # Return the configured app instance
     return app
